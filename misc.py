@@ -12,6 +12,12 @@ def zload(fileName):
         return pickle.load(f)
 
 
+def zload2(fileName):
+    f = gzip.open(fileName, "rb")
+    data = pickle.load(f)
+    f.close()
+    return data
+
 
 def zdump(obj, fileName):
     with gzip.open(fileName, "wb") as f:

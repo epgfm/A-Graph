@@ -13,10 +13,25 @@ def load_graph_data(json_file):
     >>> print [key for key in load_graph_data("../0/0/full.json")]
     [u'uid_names_dict', u'a_target_row', u'rows', u'channel', u'label']
     '''
-    with open(json_file) as f:
-        json_str = f.read()
+    f = open(json_file)
+    json_str = f.read()
+    f.close()
     return json.loads(json_str)
 
+
+
+def get_name_to_uid_dict(graph_data):
+    ''' (dict) -> dict
+
+    Reverse the uid_names_dict into a names_uid_dict
+    '''
+    names_uid_dict = {}
+    uid_names_dict = graph_data["uid_names_dict"]
+    for uid in uid_names_dict:
+        ircname = uid_names_dict[uid][0]
+        if ircname not in names_uid_dict:
+            names_uid_dict[ircname] = uid
+    return names_uid_dict
 
 
 def get_target_uid(graph_data):
@@ -27,14 +42,10 @@ def get_target_uid(graph_data):
     u'30050'
     '''
     target_row_indice = graph_data["a_target_row"]
+    # TODO: handle len 0 list of rows
     target_row = graph_data['rows'][target_row_indice]
     # Build dict of names: uid
-    names_uid_dict = {}
-    uid_names_dict = graph_data["uid_names_dict"]
-    for uid in uid_names_dict:
-        ircname = uid_names_dict[uid][0]
-        if ircname not in names_uid_dict:
-            names_uid_dict[ircname] = uid
+    names_uid_dict = get_name_to_uid_dict(graph_data)
     # get ircname from target row
     target_ircname = target_row.split()[1][1:-1] # Strip <>
     return names_uid_dict[target_ircname]
