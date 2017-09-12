@@ -1,3 +1,3 @@
 # A-Graph
 
-Scripts to gather statistics on the graphes.
+Scripts to gather statistics on the graphs.
